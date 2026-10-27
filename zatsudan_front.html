@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>雑談ネタガチャ</title>
+  <style>
+    :root {
+      --primary-color: #4A90E2;
+      --bg-color: #F4F7F6;
+      --card-bg: #FFFFFF;
+      --text-color: #333333;
+      --accent-color: #FF6B6B;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      padding: 24px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .category-select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #E0E0E0;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      outline: none;
+      background-color: #FFF;
+    }
+
+    .card {
+      background: #F8F9FA;
+      border: 2px dashed #D0D7DE;
+      border-radius: 15px;
+      padding: 24px 16px;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .card.spinning {
+      opacity: 0.5;
+      transform: scale(0.98);
+    }
+
+    .topic-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .hint-text {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .btn-draw {
+      width: 100%;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .btn-draw:active {
+      transform: scale(0.98);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-sub {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #DDD;
+      background: #FFF;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>🔥無限会話🔥</h1>
+
+  <select id="category" class="category-select">
+    <option value="all">すべてのカテゴリ</option>
+    <option value="work">仕事・職場</option>
+    <option value="first">初対面・浅い関係</option>
+    <option value="hobby">趣味・休日</option>
+    <option value="drink">飲み会・会話を広げる</option>
+  </select>
+
+  <div class="card" id="card">
+    <div class="topic-text" id="topic">ボタンを押してネタをひく！</div>
+  </div>
+
+  <button class="btn-draw" id="drawBtn" onclick="drawTopic()">ガチャを回す！
+
+  <!-- <div class="custom-section">
+    <h2>ユーザー定義の単語の追加モード</h2>
+    <div class="input-group">
+      <input type="text" id="AdjInput" placeholder="形容詞を追加">
+      <button class="btn-add" onclick="addAdj()">追加</button>
+    </div>
+    <div class="input-group">
+      <input type="text" id="NunInput" placeholder="名詞を追加">
+      <button class="btn-add" onclick="addNun()">追加</button>
+    </div>
+    
+  </div> -->
+<script>
+  const adjective = ["仲良くなりたい","相談したい","武器にしたい","ロマンチックな","データタイプっぽい","修学旅行で同班になりたい","旅行一緒に行きたい","見た目とのギャップがありそうな","見てられない","変えるべき","生まれ変わったらなりたい"]
+
+  const noun = ["スポーツ","楽器","都道府県","たばこ","文字","アプリ","家電","教科","調味料","料理","飲み物","食べ物","動物","惑星","国","筆記用具","パン"];
+
+  function drawTopic(){
+    const card = document.getElementById('card');
+    const topicEL = document.getElementById('topic');
+
+    card.classList.add('spinning');
+    topicEL.textContent = ('loading...');
+  
+    setTimeout(() => {
+      const randomAdj = adjective[Math.floor(Math.random() * adjective.length)];
+      const randomNun = noun[Math.floor(Math.random()* noun.length)];
+  
+      const combinedText = `〈${randomAdj}〉<br>〈${randomNun}〉`;
+  
+      topicEL.innerHTML = combinedText;
+      card.classList.remove('spinning');
+    }, 300);
+  }
+
+  // function addAdj() {
+  //   const input = document.getElementById('AdjInput');
+  //   const value = input.value.trim();
+
+  //   if (value === ""){
+  //     alert("形容詞を入力してください");
+  //     return;
+  //   }
+
+  //   adjective.push(value);
+  //   input.value = "";
+  //   alert(`「${value}」を追加しました`);
+  // }
+
+  // function addNun() {
+  //   const input = document.getElementById('NunInput');
+  //   const value = input.value.trim();
+
+  //   if (value === ""){
+  //     alert("名詞を入力してください");
+  //     return;
+  //   }
+
+  //   noun.push(value);
+  //   input.value = "";
+  //   alert(`「${value}」を追加しました`);
+  // }
+  
+</script>  
+
+</body>
+</html>
